@@ -64,14 +64,14 @@ class AddSoftPurgeHeaders implements EventSubscriberInterface {
 
     // Build the modified Cache-Control header.
     $cache_control_header = $response->headers->get('Cache-Control');
-    $cache_control_header .= ', stale-while-revalidate=' . $config->get('stale_while_revalidate_value');
+    $surrogate_control_header = $cache_control_header . ', stale-while-revalidate=' . $config->get('stale_while_revalidate_value');
 
     if ((bool) $config->get('stale_if_error')) {
-      $cache_control_header .= ', stale-if-error=' . $config->get('stale_if_error_value');
+      $surrogate_control_header .= ', stale-if-error=' . $config->get('stale_if_error_value');
     }
 
     // Set the modified Cache-Control header.
-    $response->headers->set('Cache-Control', $cache_control_header);
+    $response->headers->set('Surrogate-Control', $surrogate_control_header);
   }
 
   /**
