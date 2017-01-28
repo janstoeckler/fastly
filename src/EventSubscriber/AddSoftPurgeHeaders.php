@@ -45,7 +45,7 @@ class AddSoftPurgeHeaders implements EventSubscriberInterface {
   }
 
   /**
-   * Adds Cache-Control headers if soft purging is enabled.
+   * Adds Surrogate-Control headers if soft purging is enabled.
    *
    * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
    *   The event to process.
@@ -63,8 +63,7 @@ class AddSoftPurgeHeaders implements EventSubscriberInterface {
     $response = $event->getResponse();
 
     // Build the modified Cache-Control header.
-    $cache_control_header = $response->headers->get('Cache-Control');
-    $surrogate_control_header = $cache_control_header . ', stale-while-revalidate=' . $config->get('stale_while_revalidate_value');
+    $surrogate_control_header = 'stale-while-revalidate=' . $config->get('stale_while_revalidate_value');
 
     if ((bool) $config->get('stale_if_error')) {
       $surrogate_control_header .= ', stale-if-error=' . $config->get('stale_if_error_value');
